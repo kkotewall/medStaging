@@ -1,5 +1,5 @@
-// Importing React since we are using React.
-import React from 'react';
+import React, { Component } from 'react';
+import axios from 'axios';
 // Importing UI components from material-ui-next
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
@@ -8,9 +8,6 @@ import Card, { CardContent } from 'material-ui/Card';
 import { withStyles } from 'material-ui/styles';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
-// Import react-drop-to-upload component
-// https://www.npmjs.com/package/react-drop-to-upload
-// import DropToUpload from 'react-drop-to-upload';
 
 const styles = {
   textField: {
@@ -45,98 +42,63 @@ const styles = {
   },
 };
 
-class AttachmentsForm extends React.Component {
+class AttachmentsForm extends Component {
+  constructor() {
+    super();
+    this.state = {
+      description: '',
+      selectedFile: '',
+    };
+  }
+
+  onChange = (e) => {
+    const state = this.state;
+
+    switch (e.target.name) {
+      case 'selectedFile':
+        state.selectedFile = e.target.files[0];
+        break;
+      default:
+        state[e.target.name] = e.target.value;
+    }
+
+    this.setState(state);
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    const { description, selectedFile } = this.state;
+    let formData = new FormData();
+
+    formData.append('description', description);
+    formData.append('selectedFile', selectedFile);
+
+    axios.post('/', formData)
+      .then((result) => {
+        // access results...
+      });
+  }
+
   render() {
+    // form inputs use this.props which is pulled to MongoDB
     const { classes } = this.props;
-
+    // s3 upload uses this.state which appends to axios call
+    const { description, selectedFile } = this.state;
     return (
-      <div>
-        <Card className={classes.root}>
-          <CardContent>
-            <Typography gutterBottom variant="headline" component="h2">
-              Add attachment
-            </Typography>
-            <form noValidate autoComplete="off">
-              {/* <FormControl className={classes.formControl} fullWidth>
-                <InputLabel htmlFor="select-doctor-dropdown">Select a doctor</InputLabel>
-                <Select
-                  value={this.props.labDoctor}
-                  onChange={this.props.handleLabDoctorChange}
-                  inputProps={{
-                    doctor: '',
-                    id: 'select-doctor',
-                  }}
-                >
-                  <MenuItem value="" />
-                  <MenuItem value="Pain">Dr. Pain</MenuItem>
-                  <MenuItem value="Joins">Dr. Jones</MenuItem>
-                  <MenuItem value="Johnson">Dr. Johnson</MenuItem>
-                  <MenuItem value="Smith">Dr. Smith</MenuItem>
-                  <MenuItem value="Phil">Dr. Phil</MenuItem>
-                  <MenuItem value="J"></MenuItem>Dr. J</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
-                </Select>
-              </FormControl> */}
-              
-              <FormControl className={classes.formControl} fullWidth>
-                <InputLabel htmlFor="select-doctor">Select a doctor</InputLabel>
-                <TextField
-                  id="select-doctor-dropdown"
-                  type="text"
-                  className={classes.textField}
-                  InputLabelProps={{
-                      shrink: true,
-                  }}
-                  value={this.props.attachmentDoctor}
-                  onChange={this.props.handleAttachmentDoctorChange}
-                />
-              </FormControl>
-
-              <FormControl className={classes.formControl} fullWidth>
-                <InputLabel htmlFor="lab-date">Date</InputLabel>
-                <TextField
-                  id="lab-date"
-                  type="date"
-                  defaultValue="MM-DD-YYYY"
-                  className={classes.textField}
-                  InputLabelProps={{
-                      shrink: true,
-                  }}
-                  value={this.props.attachentDate}
-                  onChange={this.props.handleAttachmentDateChange}
-                />
-              </FormControl>
-
-              <FormControl className={classes.formControl} fullWidth>
-                <InputLabel htmlFor="lab-subject">Subject</InputLabel>
-                <TextField
-                  id="lab-subject"
-                  type="text"
-                  className={classes.textField}
-                  InputLabelProps={{
-                      shrink: true,
-                  }}
-                  value={this.props.attachmentSubject}
-                  onChange={this.props.handleAttachmentSubjectChange}
-                />
-              </FormControl>
-
-              {/* <DropToUpload
-                onDrop={this.handleDrop}
-                className={classes.dragndrop}
-              >
-              Drop file here to upload
-              </DropToUpload> */}
-
-              <Button size="large" color="primary" variant="raised" className={classes.button} onClick={this.props.handleFormSubmit}>
-                Add attachment
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+      <form onSubmit={this.onSubmit}>
+        <input
+          type="text"
+          name="description"
+          value={description}
+          onChange={this.onChange}
+        />
+        <input
+          type="file"
+          name="selectedFile"
+          onChange={this.onChange}
+        />
+        <button type="submit">Submit</button>
+      </form>
     );
   }
 }
-
-export default withStyles(styles)(AttachmentsForm);
