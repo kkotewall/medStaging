@@ -1,0 +1,36 @@
+  /*Sticky footer*/
+.Site {
+  /* display: flex; */
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.main-content-section {
+  flex: 1;
+  min-height: 115vh;
+  margin-bottom: 100px;
+}
+
+/* Color of site background */
+body {
+  background-color: #03A9f4;
+}
+
+/* Color of top navigation bar */
+.appBar {
+  background-color: #007AC1 !important;
+}
+
+/* Color of headers */
+.header {
+  color: white !important;
+}
+
+/* Remove any text decoration from links.*/
+a {
+  text-decoration: none;
+}
+
+
+
+
