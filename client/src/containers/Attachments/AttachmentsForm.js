@@ -43,17 +43,17 @@ const styles = {
 };
 
 class AttachmentsForm extends Component {
+  // create constructor state
   constructor() {
     super();
     this.state = {
-      description: '',
+      key: '',
       selectedFile: '',
     };
   }
-
+  // grab file user selects to upload from button
   onChange = (e) => {
     const state = this.state;
-
     switch (e.target.name) {
       case 'selectedFile':
         state.selectedFile = e.target.files[0];
@@ -64,41 +64,105 @@ class AttachmentsForm extends Component {
 
     this.setState(state);
   }
-
+  // attachment form submit
   onSubmit = (e) => {
     e.preventDefault();
-    const { description, selectedFile } = this.state;
+    const { key, selectedFile } = this.state;
     let formData = new FormData();
 
-    formData.append('description', description);
+    formData.append('key', key);
     formData.append('selectedFile', selectedFile);
 
     axios.post('/', formData)
       .then((result) => {
         // access results...
       });
-  }
+    }
 
   render() {
-    // form inputs use this.props which is pulled to MongoDB
+    // this.props pulled from MongoDB
     const { classes } = this.props;
-    // s3 upload uses this.state which appends to axios call
+    // this.state captured for axios -> s3
     const { description, selectedFile } = this.state;
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          type="text"
-          name="description"
-          value={description}
-          onChange={this.onChange}
-        />
-        <input
-          type="file"
-          name="selectedFile"
-          onChange={this.onChange}
-        />
-        <button type="submit">Submit</button>
-      </form>
+      <div>
+        <Card className={classes.root}>
+          <CardContent>
+            <Typography gutterBottom variant="headline" component="h2">
+              Add attachment
+            </Typography>
+            <form noValidate autoComplete="off">
+              // doctor drop-down menu
+              <FormControl className={classes.formControl} fullWidth>
+                <InputLabel htmlFor="select-doctor">Select a doctor</InputLabel>
+                <TextField
+                  id="select-doctor-dropdown"
+                  type="text"
+                  className={classes.textField}
+                  InputLabelProps={{
+                      shrink: true,
+                  }}
+                  value={this.props.attachmentDoctor}
+                  onChange={this.props.handleAttachmentDoctorChange}
+                />
+              </FormControl>
+              // calendar selector
+              <FormControl className={classes.formControl} fullWidth>
+                <InputLabel htmlFor="lab-date">Date</InputLabel>
+                <TextField
+                  id="lab-date"
+                  type="date"
+                  defaultValue="MM-DD-YYYY"
+                  className={classes.textField}
+                  InputLabelProps={{
+                      shrink: true,
+                  }}
+                  value={this.props.attachentDate}
+                  onChange={this.props.handleAttachmentDateChange}
+                />
+              </FormControl>
+              // subject text field
+              <FormControl className={classes.formControl} fullWidth>
+                <InputLabel htmlFor="lab-subject">Subject</InputLabel>
+                <TextField
+                  id="lab-subject"
+                  type="text"
+                  className={classes.textField}
+                  InputLabelProps={{
+                      shrink: true,
+                  }}
+                  value={this.props.attachmentSubject}
+                  onChange={this.props.handleAttachmentSubjectChange}
+                />
+              </FormControl>
+              //confirm button submit to MongoDB
+              <Button size="large" color="primary" variant="raised" className={classes.button} onClick={this.props.handleConfirm}>
+                Confirm Information
+              </Button>
+            </form>
+            // attachment form submit to S3
+            <form onSubmit={this.onSubmit}>
+              <input
+                type="text"
+                name="key"
+                value={key}
+                onChange={this.onChange}
+              />
+              <input
+                type="file"
+                name="selectedFile"
+                onChange={this.onChange}
+              />
+              // submit button to S3 uploader
+              <Button size="large" color="primary" variant="raised" type="submit" className={classes.button} onClick={this.props.handleFormSubmit}>
+                Add attachment
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 }
+
+export default withStyles(styles)(AttachmentsForm);
