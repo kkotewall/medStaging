@@ -8,6 +8,7 @@ import Card, { CardContent } from 'material-ui/Card';
 import { withStyles } from 'material-ui/styles';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
+// missing styling: IconButton, Tooltip, MenuItem
 
 const styles = {
   textField: {
@@ -42,31 +43,40 @@ const styles = {
   },
 };
 
+// show user selection from dropdown attachments list
 class AttachmentsForm extends Component {
+  handleAttachmentMenuOption = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+    event.preventDefault();
+    console.log(event.target.value);
+    this.props.handleAttachmentChange(event);
+  }
+
   // create constructor state
   constructor() {
     super();
     this.state = {
       key: '',
       selectedFile: '',
+      value: '',
     };
   }
   // grab file user selects to upload from button
-  onChange = (e) => {
+  onChange = (event) => {
     const state = this.state;
-    switch (e.target.name) {
+    switch (event.target.name) {
       case 'selectedFile':
-        state.selectedFile = e.target.files[0];
+        state.selectedFile = event.target.files[0];
         break;
       default:
-        state[e.target.name] = e.target.value;
+        state[event.target.name] = event.target.value;
     }
 
     this.setState(state);
   }
   // attachment form submit
-  onSubmit = (e) => {
-    e.preventDefault();
+  onSubmit = (event) => {
+    event.preventDefault();
     const { key, selectedFile } = this.state;
     let formData = new FormData();
 
@@ -80,10 +90,15 @@ class AttachmentsForm extends Component {
     }
 
   render() {
-    // this.props pulled from MongoDB
-    const { classes } = this.props;
+    // pulled from other sources into render, inc MongoDB
+    const { classes, attachments } = this.props;
+    console.log(attachments);
+
     // this.state captured for axios -> s3
     const { description, selectedFile } = this.state;
+    console.log(description);
+    console.log(selectedFile);
+
     return (
       <div>
         <Card className={classes.root}>
@@ -91,7 +106,7 @@ class AttachmentsForm extends Component {
             <Typography gutterBottom variant="headline" component="h2">
               Add attachment
             </Typography>
-            <form noValidate autoComplete="off">
+            <form noValidate autoComplete="off" onSubmit={this.onSubmit}>
               // doctor drop-down menu
               <FormControl className={classes.formControl} fullWidth>
                 <InputLabel htmlFor="select-doctor">Select a doctor</InputLabel>
@@ -135,27 +150,71 @@ class AttachmentsForm extends Component {
                   onChange={this.props.handleAttachmentSubjectChange}
                 />
               </FormControl>
-              //confirm button submit to MongoDB
-              <Button size="large" color="primary" variant="raised" className={classes.button} onClick={this.props.handleConfirm}>
-                Confirm Information
+              // s3 file key
+              <FormControl className={classes.formControl} fullWidth>
+                <InputLabel htmlFor="attachment-key">
+                  <span>
+                    Attachment key
+                  </span>
+                </InputLabel>
+                <TextField
+                  id="attachment-key"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  margin="normal"
+                  className={classes.textField}
+                  type="text"
+                  name="key"
+                  value={key}
+                  // value={this.props.attachmentKey}
+                  onChange={this.onChange}
+                  //onChange={this.props.handleAttachmentKeyChange}
+                />
+              </FormControl>
+              // file chosen to upload
+              <FormControl className={classes.formControl} fullWidth>
+                <InputLabel htmlFor="attachment-file">
+                  <span>
+                    Attachment file
+                  </span>
+                </InputLabel>
+                <TextField
+                  id="attachment-file"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  margin="normal"
+                  // className={classes.textField}
+                  type="file"
+                  name="selectedFile"
+                  onChange={this.onChange}
+                />
+              </FormControl>
+              // onClick props for MongoDB
+              <Button
+                size="large"
+                color="primary"
+                variant="raised"
+                // triggers onSubmit functions for S3 upload
+                className={classes.button.}
+                // values sent exported for Attachments.js
+                onClick={this.props.handleFormConfirm}
+              >
+                Confirm form.
               </Button>
-            </form>
-            // attachment form submit to S3
-            <form onSubmit={this.onSubmit}>
-              <input
-                type="text"
-                name="key"
-                value={key}
-                onChange={this.onChange}
-              />
-              <input
-                type="file"
-                name="selectedFile"
-                onChange={this.onChange}
-              />
-              // submit button to S3 uploader
-              <Button size="large" color="primary" variant="raised" type="submit" className={classes.button} onClick={this.props.handleFormSubmit}>
-                Add attachment
+              //  onChange evnts added to formData to be uploaded to S3 bucket
+              <Button
+                size="large"
+                color="primary"
+                variant="raised"
+                // triggers onSubmit functions for S3 upload
+                type="submit"
+                className={classes.button}
+                // values sent exported for Attachments.js
+                onClick={this.props.handleFormSubmit}
+                >
+                Submit attachment
               </Button>
             </form>
           </CardContent>
