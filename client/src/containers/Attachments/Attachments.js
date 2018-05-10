@@ -79,7 +79,7 @@ class Attachments extends Component {
     // When user submits attachment form, save attachment inforation to database.
     handleFormSubmit = event => {
         event.preventDefault();
-        console.log("this.state.attachmentKey: ", this.state.attachmentKey);
+        // console.log("this.state.attachmentKey: ", this.state.attachmentKey);
         console.log("this.state.attachmentDoctor: ", this.state.attachmentDoctor);
         console.log("this.state.attachmentDate: ", this.state.attachmentDate);
         console.log("this.state.attachmentSubject: ", this.state.attachmentSubject);
@@ -103,7 +103,7 @@ class Attachments extends Component {
           <div className="main-content-section">
             <Grid container spacing={16}>
               <Grid item xs={12} sm={12} md={6}>
-                // <handleAttachmentKeyChange={this.handleAttachmentKeyChange}
+                {/* <handleAttachmentKeyChange={this.handleAttachmentKeyChange}*/}
                   handleFormSubmit={this.handleFormConfirm}
                   handleAttachmentDoctorChange={this.handleAttachmentDoctorChange}
                   handleAttachmentDateChange={this.handleAttachmentDateChange}
