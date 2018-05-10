@@ -197,7 +197,7 @@ class AttachmentsForm extends Component {
                 color="primary"
                 variant="raised"
                 // triggers onSubmit functions for S3 upload
-                className={classes.button.}
+                className={classes.button}
                 // values sent exported for Attachments.js
                 onClick={this.props.handleFormConfirm}
               >
