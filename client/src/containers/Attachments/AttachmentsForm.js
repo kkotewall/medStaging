@@ -95,7 +95,7 @@ class AttachmentsForm extends Component {
     console.log(attachments);
 
     // this.state captured for axios -> s3
-    const { description, selectedFile } = this.state;
+    const { key, selectedFile } = this.state;
     console.log(description);
     console.log(selectedFile);
 
