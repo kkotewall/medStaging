@@ -2,12 +2,9 @@
 import React, { Component } from "react";
 // Importing UI components from rebass.
 import { Container } from 'rebass';
-// Import AttachmentsForm
-// import AttachmentsForm from  './AttachmentsForm';
+Import AttachmentsForm
+import AttachmentsForm from  './AttachmentsForm';
 
-// s3 testing
-import TestAttachmentsForm from  './TestAttachmentsForm';
-import TestAttachments from  './TestAttachments';
 // Import AttachmentsList
 // import AttachmentsList from './AttachmentsList';
 // Import API
@@ -40,21 +37,28 @@ class Attachments extends Component {
     attachmentDoctor: "",
     attachmentDate: "",
     attachmentSubject: "",
-    attachments: [],
+    // add attachmentKey to MongoDB for API calls
+    // attachmentKey: "",
     error: ""
   };
+  // When the component mounts, load all appointments and save them to this.state.appointments.
+  componentDidMount() {
+    this.loadAttachmentKeys();
+  }
 
-    // componentDidMount() {
-    //     this.loadAttachments();
+  // Loads all appointments and saves them to this.state.appointments.
+  loadAttrachmentKeys = () => {
+    AttachmentAPI.getAttachmentKeys()
+      .then(res =>
+        this.setState({ attachment keys: res.data})
+      )
+      .catch(err => console.log(err));
+  };
+
+    // Keep track of what user enters for attachmentKey value so that input can be grabbed later
+    // handleAttachmentKeyChange = (event) => {
+    //   this.setState({ appointmentKey: event.target.value });
     // }
-
-    // loadAttachments = () => {
-    //     AttachmentsAPI.getAttachments()
-    //         .then(res =>
-    //             this.setState({ attachments: res.data })
-    //         )
-    //         .catch(err => console.log(err));
-    // };
 
     // Keep track of what user selects for attachment doctor so that input can be grabbed later
     handleAttachmentDoctorChange = (event) => {
@@ -74,7 +78,7 @@ class Attachments extends Component {
     // When user submits attachment form, save attachment inforation to database.
     handleFormSubmit = event => {
         event.preventDefault();
-        console.log("Adding attachment information");
+        console.log("this.state.attachmentKey: ", this.state.attachmentKey);
         console.log("this.state.attachmentDoctor: ", this.state.attachmentDoctor);
         console.log("this.state.attachmentDate: ", this.state.attachmentDate);
         console.log("this.state.attachmentSubject: ", this.state.attachmentSubject);
@@ -98,8 +102,8 @@ class Attachments extends Component {
           <div className="main-content-section">
             <Grid container spacing={16}>
               <Grid item xs={12} sm={12} md={6}>
-                <AttachmentsForm
-                  handleFormSubmit={this.handleFormSubmit}
+                // <handleAttachmentKeyChange={this.handleAttachmentKeyChange}
+                  handleFormSubmit={this.handleFormConfirm}
                   handleAttachmentDoctorChange={this.handleAttachmentDoctorChange}
                   handleAttachmentDateChange={this.handleAttachmentDateChange}
                   handleAttachmentSubjectChange={this.handleAttachmentSubjectChange}/>
