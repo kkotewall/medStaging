@@ -41,19 +41,20 @@ class Attachments extends Component {
     // attachmentKey: "",
     error: ""
   };
-  // When the component mounts, load all appointments and save them to this.state.appointments.
-  componentDidMount() {
-    this.loadAttachmentKeys();
-  }
 
+  // saving Key data for API call to MongoDB later?
+  // When the component mounts, load all appointments and save them to this.state.appointments.
+  // componentDidMount() {
+  //   this.loadAttachmentKeys();
+  // }
   // Loads all appointments and saves them to this.state.appointments.
-  loadAttrachmentKeys = () => {
-    AttachmentAPI.getAttachmentKeys()
-      .then(res =>
-        this.setState({ attachment keys: res.data})
-      )
-      .catch(err => console.log(err));
-  };
+  // loadAttachmentKeys = () => {
+  //   AttachmentAPI.getAttachmentKeys()
+  //     .then(res =>
+  //       this.setState({ attachmentkeys: res.data})
+  //     )
+  //     .catch(err => console.log(err));
+  // };
 
     // Keep track of what user enters for attachmentKey value so that input can be grabbed later
     // handleAttachmentKeyChange = (event) => {
