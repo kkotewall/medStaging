@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 // Importing UI components from rebass.
 import { Container } from 'rebass';
-Import AttachmentsForm
+// Import AttachmentsForm
 import AttachmentsForm from  './AttachmentsForm';
 
 // Import AttachmentsList
