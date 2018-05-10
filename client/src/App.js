@@ -20,6 +20,8 @@ import SymptomJournal from './containers/SymptomJournal';
 import DoctorList from './containers/DoctorsList';
 // Importing the Appointments page component.
 import Appointments from './containers/Appointments';
+// Importing the Attachment page component.
+import Appointments from './containers/Attachments';
 // Importing the My health log page component.
 import MedLog from './containers/MedLog';
 // Importing the Attachments page.
