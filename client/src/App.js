@@ -20,12 +20,10 @@ import SymptomJournal from './containers/SymptomJournal';
 import DoctorList from './containers/DoctorsList';
 // Importing the Appointments page component.
 import Appointments from './containers/Appointments';
-// Importing the Attachment page component.
-import Appointments from './containers/Attachments';
 // Importing the My health log page component.
 import MedLog from './containers/MedLog';
 // Importing the Attachments page.
-// import Attachments from './containers/Attachments';
+import Attachments from './containers/Attachments';
 // Importing the Prescriptions page
 import Prescriptions from './containers/Prescriptions';
 // Importing the Charts page
@@ -67,7 +65,7 @@ class App extends Component {
               <Route exact path="/doctors" component={DoctorList} />
               <Route exact path="/appointments" component={Appointments} />
               <Route exact path="/log" component={MedLog} />
-              {/*<Route exact path="/attachments" component={Attachments} />*/}
+              <Route exact path="/attachments" component={Attachments} />
               <Route exact path="/prescriptions" component={Prescriptions} />
               <Route exact path="/charts" component={Charts} />
               <Route exact path="/welcome" component={Welcome} />
